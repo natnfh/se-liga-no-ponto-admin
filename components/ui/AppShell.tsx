@@ -98,7 +98,8 @@ export function AppShell({
   const tintSize = useTransform(scrollYProgress, [0, 1], [520, 940])
   const tintX = useTransform(scrollYProgress, [0, 1], [70, 35])
   const tintY = useTransform(scrollYProgress, [0, 1], [30, 70])
-  const tintBg = useMotionTemplate`radial-gradient(${tintSize}px ${tintSize}px at ${tintX}% ${tintY}%, rgba(167, 139, 250, ${tintAlpha}), transparent 60%)`
+  // More vibrant purple (slightly deeper than tailwind violet)
+  const tintBg = useMotionTemplate`radial-gradient(${tintSize}px ${tintSize}px at ${tintX}% ${tintY}%, rgba(168, 85, 247, ${tintAlpha}), transparent 60%)`
 
   // Cursor spotlight (white halo) - fixed layer so it doesn't disappear on scroll
   const cursorX = useMotionValue(0.5)
@@ -119,7 +120,7 @@ export function AppShell({
   }, [cursorX, cursorY, reduce])
 
   const spotAlpha = useTransform(scrollYProgress, [0, 1], [0.32, 0.22])
-  const spotSize = useTransform(scrollYProgress, [0, 1], [260, 360])
+  const spotSize = useTransform(scrollYProgress, [0, 1], [170, 240])
   const spotX = useTransform(cursorXSmooth, (v) => `${v * 100}%`)
   const spotY = useTransform(cursorYSmooth, (v) => `${v * 100}%`)
   const spotBg = useMotionTemplate`radial-gradient(${spotSize}px ${spotSize}px at ${spotX} ${spotY}, rgba(255,255,255, ${spotAlpha}), transparent 65%)`
