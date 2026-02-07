@@ -92,8 +92,20 @@ export function AppShell({
     [],
   )
 
+  // Background tint that evolves smoothly with scroll (prevents perceived "jumps")
+  const tintAlpha = useTransform(scrollYProgress, [0, 0.45, 1], [0.0, 0.35, 0.6])
+  const tintSize = useTransform(scrollYProgress, [0, 1], [520, 940])
+  const tintX = useTransform(scrollYProgress, [0, 1], [70, 35])
+  const tintY = useTransform(scrollYProgress, [0, 1], [30, 70])
+  const tintBg = useMotionTemplate`radial-gradient(${tintSize}px ${tintSize}px at ${tintX}% ${tintY}%, rgba(110, 143, 46, ${tintAlpha}), transparent 60%)`
+
   return (
     <div className="min-h-screen custom-cursor-active">
+      <div className="tp-bg" aria-hidden>
+        <motion.div className="tp-bg__tint" style={{ opacity: 1, backgroundImage: tintBg as any }} />
+        <div className="tp-bg__vignette" />
+      </div>
+
       <MagicCursor />
       <AnimatePresence>
         {sidebarOpen && (
@@ -107,7 +119,7 @@ export function AppShell({
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 flex min-h-screen">
+      <div className="tp-app flex min-h-screen">
         {/* Sidebar */}
         <motion.aside
           initial={false}
