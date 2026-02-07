@@ -97,7 +97,7 @@ export function AppShell({
   const tintSize = useTransform(scrollYProgress, [0, 1], [520, 940])
   const tintX = useTransform(scrollYProgress, [0, 1], [70, 35])
   const tintY = useTransform(scrollYProgress, [0, 1], [30, 70])
-  const tintBg = useMotionTemplate`radial-gradient(${tintSize}px ${tintSize}px at ${tintX}% ${tintY}%, rgba(110, 143, 46, ${tintAlpha}), transparent 60%)`
+  const tintBg = useMotionTemplate`radial-gradient(${tintSize}px ${tintSize}px at ${tintX}% ${tintY}%, rgba(167, 139, 250, ${tintAlpha}), transparent 60%)`
 
   return (
     <div className="min-h-screen custom-cursor-active">
