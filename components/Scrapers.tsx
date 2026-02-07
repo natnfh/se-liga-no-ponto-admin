@@ -1,6 +1,11 @@
 
-import React, { useState } from 'react';
-import { Play, RefreshCw, Terminal, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import React, { useState } from 'react'
+import { Play, RefreshCw, Terminal, CheckCircle2, XCircle, Clock } from 'lucide-react'
+import { Card, CardContent, CardHeader } from './ui/Card'
+import { Badge } from './ui/Badge'
+import { Button } from './ui/Button'
+import { motion } from 'framer-motion'
+import { useMotionPreset } from './ui/motion'
 
 const Scrapers: React.FC = () => {
   const [isRunningAll, setIsRunningAll] = useState(false);
@@ -13,85 +18,100 @@ const Scrapers: React.FC = () => {
     { id: 'livelo', name: 'Livelo Scraper', lastRun: 'Yesterday', status: 'Success', items: 56 },
   ];
 
+  const m = useMotionPreset()
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Scrapers & Scrapers</h2>
-          <p className="text-slate-500">Manage Python scripts and background jobs</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Scrapers & Jobs</h2>
+          <p className="text-ink-600">Automation pipelines • Python scrapers • schedulers</p>
         </div>
-        <button 
+        <Button
           onClick={() => setIsRunningAll(true)}
           disabled={isRunningAll}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+          variant="primary"
+          size="sm"
+          leftIcon={isRunningAll ? <RefreshCw className="animate-spin" size={16} /> : <Play size={16} />}
         >
-          {isRunningAll ? <RefreshCw className="animate-spin" size={18} /> : <Play size={18} />}
           {isRunningAll ? 'Running All Seeders...' : 'Trigger All Seeders'}
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {scraperList.map((scraper) => (
-          <div key={scraper.id} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <div className="p-3 bg-slate-50 rounded-lg text-slate-600">
-                <Terminal size={24} />
+        {scraperList.map((scraper, i) => (
+          <Card key={scraper.id}>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...m.transition, delay: i * m.stagger }}
+            >
+              <CardContent className="pt-6">
+              <div className="flex justify-between items-start mb-4">
+                <div className="p-3 bg-white/6 rounded-xl border border-white/10 text-ink-200">
+                  <Terminal size={20} />
+                </div>
+                <Badge tone={scraper.status === 'Success' ? 'success' : 'danger'}>
+                  {scraper.status}
+                </Badge>
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                scraper.status === 'Success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-              }`}>
-                {scraper.status}
-              </span>
-            </div>
-            
-            <h3 className="font-bold text-lg mb-1">{scraper.name}</h3>
-            <div className="space-y-3 mt-4">
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <Clock size={16} />
-                <span>Last run: {scraper.lastRun}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                {scraper.status === 'Success' ? <CheckCircle2 className="text-green-500" size={16} /> : <XCircle className="text-red-500" size={16} />}
-                <span>{scraper.items} items parsed to Postgres</span>
-              </div>
-            </div>
 
-            <div className="mt-6 pt-6 border-t border-slate-100 flex gap-2">
-              <button className="flex-1 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
-                Run Now
-              </button>
-              <button className="px-3 py-2 text-slate-500 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                Logs
-              </button>
-            </div>
-          </div>
+              <h3 className="font-semibold text-lg text-ink-50 mb-1">{scraper.name}</h3>
+              <div className="space-y-3 mt-4">
+                <div className="flex items-center gap-2 text-xs text-ink-600">
+                  <Clock size={14} />
+                  <span>Last run: {scraper.lastRun}</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-ink-600">
+                  {scraper.status === 'Success' ? (
+                    <CheckCircle2 className="text-lum-green" size={14} />
+                  ) : (
+                    <XCircle className="text-lum-rose" size={14} />
+                  )}
+                  <span>{scraper.items} items parsed to Postgres</span>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-white/6 flex gap-2">
+                <Button className="flex-1" size="sm" variant="secondary">
+                  Run now
+                </Button>
+                <Button size="sm" variant="ghost">
+                  Logs
+                </Button>
+              </div>
+              </CardContent>
+            </motion.div>
+          </Card>
         ))}
       </div>
 
-      <div className="bg-slate-900 rounded-xl p-6 text-white overflow-hidden relative">
-        <div className="relative z-10">
-          <h3 className="text-lg font-bold mb-2">Technical Note: Monorepo Architecture</h3>
-          <p className="text-slate-400 text-sm max-w-2xl mb-4">
-            Scrapers are located in <code className="bg-slate-800 px-1 py-0.5 rounded text-indigo-400">services/scrapers</code>. 
-            They are invoked via an HTTP endpoint on the API protected by <code className="bg-slate-800 px-1 py-0.5 rounded text-indigo-400">SCHEDULER_SECRET</code>.
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <h3 className="text-sm font-semibold text-ink-50">Technical note</h3>
+          <p className="text-xs text-ink-600">Monorepo • scheduler • secrets</p>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-ink-600 max-w-2xl">
+            Scrapers are located in{' '}
+            <code className="bg-white/5 px-1 py-0.5 rounded text-lum-cyan">services/scrapers</code>. They
+            are invoked via an HTTP endpoint protected by{' '}
+            <code className="bg-white/5 px-1 py-0.5 rounded text-lum-cyan">SCHEDULER_SECRET</code>.
           </p>
-          <div className="flex gap-4">
-            <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-              <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider">Scraper Engine</p>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white/5 p-3 rounded-xl border border-white/8">
+              <p className="text-xs text-ink-600 mb-1 uppercase tracking-wider">Scraper Engine</p>
               <p className="font-mono text-sm">Python / FastAPI</p>
             </div>
-            <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-              <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider">Scheduler</p>
+            <div className="bg-white/5 p-3 rounded-xl border border-white/8">
+              <p className="text-xs text-ink-600 mb-1 uppercase tracking-wider">Scheduler</p>
               <p className="font-mono text-sm">GCP / Cron (VPS)</p>
             </div>
           </div>
-        </div>
-        <div className="absolute -right-4 -bottom-4 opacity-10">
-          <Terminal size={200} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
-  );
-};
+  )
+}
 
-export default Scrapers;
+export default Scrapers

@@ -9,6 +9,7 @@ import {
   Menu,
   Bell,
   Search,
+  Sparkles,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AppSection } from '../../types'
@@ -68,15 +69,27 @@ export function AppShell({
             <div className="px-6 py-6">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-lum-cyan/40 via-lum-indigo/40 to-lum-violet/30 shadow-glow" />
-                  <div className="absolute inset-0 rounded-xl border border-white/10" />
+                  <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-lum-cyan/40 via-lum-indigo/40 to-lum-violet/30 shadow-glow" />
+                  <div className="absolute inset-0 rounded-2xl border border-white/12" />
                 </div>
                 <div className="min-w-0">
                   <div className="text-sm font-semibold tracking-tight text-ink-50">
                     Se Liga No Ponto
                   </div>
                   <div className="text-xs text-ink-600 truncate">
-                    Admin • Luminal Runtime
+                    Admin • Unified Ops
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-white/8 bg-white/4 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-ink-200">
+                    <Sparkles size={16} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-ink-600">Platform Health</p>
+                    <p className="text-sm font-semibold text-ink-50">All systems nominal</p>
                   </div>
                 </div>
               </div>
@@ -111,11 +124,17 @@ export function AppShell({
             </nav>
 
             <div className="mt-auto p-6 border-t border-white/6">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-white/10 border border-white/10" />
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold truncate">Owner</div>
-                  <div className="text-xs text-ink-600 truncate">Solo admin</div>
+              <div className="rounded-2xl border border-white/8 bg-white/4 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-white/10 border border-white/10" />
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold truncate">Owner</div>
+                    <div className="text-xs text-ink-600 truncate">Solo admin</div>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center justify-between text-[11px] text-ink-600">
+                  <span>Role</span>
+                  <span className="text-ink-200 font-semibold">Super Admin</span>
                 </div>
               </div>
             </div>

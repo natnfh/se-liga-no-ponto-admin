@@ -16,6 +16,29 @@ body {
     radial-gradient(900px 700px at 90% 10%, rgba(34, 211, 238, 0.14), transparent 55%),
     radial-gradient(900px 700px at 50% 110%, rgba(167, 139, 250, 0.10), transparent 60%),
     linear-gradient(180deg, #05070c 0%, #070b12 40%, #05070c 100%);
+  color: rgba(255, 255, 255, 0.92);
+  font-feature-settings: "ss01", "cv01", "cv02", "cv03";
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.68);
+  }
 }
 
 /* Subtle grain to break digital flatness */

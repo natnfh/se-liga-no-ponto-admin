@@ -1,6 +1,9 @@
 
-import React from 'react';
-import { Smartphone, CheckCircle2, Circle, AlertTriangle, ExternalLink, Code } from 'lucide-react';
+import React from 'react'
+import { Smartphone, CheckCircle2, Circle, AlertTriangle, ExternalLink, Code } from 'lucide-react'
+import { Card, CardContent, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Badge } from './ui/Badge'
 
 const MobileDeployment: React.FC = () => {
   const steps = [
@@ -14,79 +17,96 @@ const MobileDeployment: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-indigo-600 rounded-2xl p-8 text-white flex flex-col md:flex-row justify-between items-center gap-6">
-        <div>
-          <h2 className="text-3xl font-bold mb-2">Capacitor Deployment Guide</h2>
-          <p className="text-indigo-100 max-w-lg">Follow this checklist to move from <span className="font-mono bg-indigo-500 px-1 rounded">localhost</span> to App Stores.</p>
-        </div>
-        <div className="flex gap-3">
-          <button className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-bold hover:bg-indigo-50 transition-colors">
-            Open Xcode
-          </button>
-          <button className="px-4 py-2 bg-indigo-500 text-white rounded-lg font-bold hover:bg-indigo-400 transition-colors">
-            Android Studio
-          </button>
-        </div>
-      </div>
+      <Card>
+        <CardContent className="pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Capacitor Deployment Guide</h2>
+              <p className="text-ink-600 max-w-lg">
+                Move from <span className="font-mono bg-white/5 px-1 rounded text-lum-cyan">localhost</span> to
+                App Stores with a controlled release pipeline.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button variant="secondary" size="sm">Open Xcode</Button>
+              <Button variant="primary" size="sm">Android Studio</Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-lg font-bold px-2">Launch Checklist</h3>
+          <div className="flex items-center justify-between px-2">
+            <h3 className="text-lg font-semibold">Launch Checklist</h3>
+            <Badge tone="info">6 steps</Badge>
+          </div>
           {steps.map((step, i) => (
-            <div key={i} className="bg-white p-5 rounded-xl border border-slate-200 flex items-start gap-4 shadow-sm hover:border-indigo-300 transition-colors group">
-              <div className="mt-1">
-                {step.status === 'completed' ? (
-                  <CheckCircle2 className="text-green-500" />
-                ) : step.status === 'blocked' ? (
-                  <AlertTriangle className="text-amber-500" />
-                ) : (
-                  <Circle className="text-slate-300 group-hover:text-indigo-400" />
-                )}
-              </div>
-              <div className="flex-1">
-                <h4 className="font-bold text-slate-800">{step.title}</h4>
-                <p className="text-sm text-slate-500">{step.desc}</p>
-              </div>
-              <button className="text-slate-400 hover:text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ExternalLink size={18} />
-              </button>
-            </div>
+            <Card key={i}>
+              <CardContent className="pt-5">
+                <div className="flex items-start gap-4">
+                  <div className="mt-1">
+                    {step.status === 'completed' ? (
+                      <CheckCircle2 className="text-lum-green" />
+                    ) : step.status === 'blocked' ? (
+                      <AlertTriangle className="text-lum-amber" />
+                    ) : (
+                      <Circle className="text-ink-600" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-ink-50">{step.title}</h4>
+                    <p className="text-sm text-ink-600">{step.desc}</p>
+                  </div>
+                  <Button variant="ghost" size="sm">
+                    <ExternalLink size={16} />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <h3 className="font-bold mb-4 flex items-center gap-2">
-              <Code size={18} className="text-indigo-600" />
-              Build Commands
-            </h3>
-            <div className="space-y-3">
-              <div className="p-3 bg-slate-900 rounded-lg font-mono text-xs text-indigo-300 leading-relaxed">
-                <p className="text-slate-500"># Prepare Web</p>
-                <p>pnpm -C apps/web build</p>
-                <p className="mt-2 text-slate-500"># Sync to Native</p>
-                <p>npx cap sync android</p>
-                <p className="mt-2 text-slate-500"># Open Native IDE</p>
-                <p>npx cap open android</p>
+          <Card>
+            <CardHeader>
+              <h3 className="text-sm font-semibold flex items-center gap-2">
+                <Code size={16} className="text-lum-cyan" /> Build Commands
+              </h3>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="p-3 bg-bg-950 rounded-lg font-mono text-xs text-lum-cyan leading-relaxed border border-white/8">
+                  <p className="text-ink-600"># Prepare Web</p>
+                  <p>pnpm -C apps/web build</p>
+                  <p className="mt-2 text-ink-600"># Sync to Native</p>
+                  <p>npx cap sync android</p>
+                  <p className="mt-2 text-ink-600"># Open Native IDE</p>
+                  <p>npx cap open android</p>
+                </div>
+                <p className="text-xs text-ink-600 italic">Run from project root.</p>
               </div>
-              <p className="text-xs text-slate-400 italic">Run from project root.</p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl">
-            <div className="flex items-center gap-2 text-amber-800 font-bold mb-2">
-              <AlertTriangle size={20} />
-              Important Warning
-            </div>
-            <p className="text-sm text-amber-700 leading-relaxed">
-              Mobile does NOT use Service Workers. Ensure the <code>runtime-config.json</code> is accessible externally to change 
-              <code>apiBaseUrl</code> without store updates.
-            </p>
-          </div>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-lum-amber font-semibold mb-2">
+                <AlertTriangle size={18} />
+                Important Warning
+              </div>
+              <p className="text-sm text-ink-600 leading-relaxed">
+                Mobile does NOT use Service Workers. Ensure the{' '}
+                <code className="bg-white/5 px-1 py-0.5 rounded">runtime-config.json</code> is accessible
+                externally to change <code className="bg-white/5 px-1 py-0.5 rounded">apiBaseUrl</code>{' '}
+                without store updates.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MobileDeployment;
+export default MobileDeployment
