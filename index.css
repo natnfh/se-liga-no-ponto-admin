@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Luminal foundation (2026) ---- */
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(1200px 800px at 20% -10%, rgba(99, 102, 241, 0.22), transparent 60%),
+    radial-gradient(900px 700px at 90% 10%, rgba(34, 211, 238, 0.14), transparent 55%),
+    radial-gradient(900px 700px at 50% 110%, rgba(167, 139, 250, 0.10), transparent 60%),
+    linear-gradient(180deg, #05070c 0%, #070b12 40%, #05070c 100%);
+}
+
+/* Subtle grain to break digital flatness */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: -40px;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/></filter><rect width="160" height="160" filter="url(%23n)" opacity="0.18"/></svg>');
+  mix-blend-mode: overlay;
+  opacity: 0.20;
+  transform: translateZ(0);
+}
+
+/* Accessible focus */
+:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.55);
+  outline-offset: 2px;
+}
+
+/* Reduce motion guardrail */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
