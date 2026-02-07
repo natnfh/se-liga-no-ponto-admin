@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   LayoutDashboard,
   Database,
@@ -27,12 +27,20 @@ export function AppShell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const m = useMotionPreset()
+  const [scrolled, setScrolled] = useState(false)
   const { scrollYProgress } = useScroll()
   const scrollBarX = useSpring(scrollYProgress, {
     stiffness: 220,
     damping: 40,
     mass: 0.6,
   })
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const navigation = useMemo(
     () => [
@@ -150,7 +158,12 @@ export function AppShell({
         {/* Main */}
         <div className="flex-1 min-w-0">
           {/* Topbar */}
-          <header className="sticky top-0 z-30 border-b border-white/6 bg-panel-900/40 backdrop-blur-glass">
+          <header
+            className={
+              'sticky top-0 z-30 border-b border-white/6 backdrop-blur-glass transition-[box-shadow,background-color] ' +
+              (scrolled ? 'bg-panel-900/70 shadow-elev-2' : 'bg-panel-900/40')
+            }
+          >
             {!m.transition?.duration ? null : (
               <motion.div
                 aria-hidden
