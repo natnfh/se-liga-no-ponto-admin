@@ -36,10 +36,18 @@ export function AppShell({
   })
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
+    const onScroll = () => {
+      // robust: works even if browser reports 0 for window.scrollY in some embed contexts
+      const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0
+      setScrolled(y > 8)
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    document.addEventListener('scroll', onScroll, { passive: true, capture: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      document.removeEventListener('scroll', onScroll, { capture: true } as any)
+    }
   }, [])
 
   const navigation = useMemo(
@@ -167,7 +175,7 @@ export function AppShell({
             {!m.transition?.duration ? null : (
               <motion.div
                 aria-hidden
-                className="absolute left-0 top-0 h-[2px] w-full origin-left bg-gradient-to-r from-lum-cyan via-lum-indigo to-lum-violet opacity-90"
+                className="absolute left-0 top-0 h-[3px] w-full origin-left bg-gradient-to-r from-lum-cyan via-lum-indigo to-lum-violet opacity-100"
                 style={{ scaleX: scrollBarX }}
               />
             )}
