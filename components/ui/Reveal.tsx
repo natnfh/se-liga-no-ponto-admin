@@ -20,9 +20,9 @@ type RevealProps = {
 export function Reveal({
   children,
   className,
-  amount = 0.28,
+  amount = 0.18,
   delay = 0,
-  once = true,
+  once = false,
 }: RevealProps) {
   const m = useMotionPreset()
   const reduce = usePrefersReducedMotion()
@@ -32,10 +32,10 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 16, filter: 'blur(10px)' }}
+      initial={{ opacity: 0, y: 24, filter: 'blur(14px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once, amount }}
-      transition={{ ...m.transition, delay }}
+      transition={{ ...m.transition, duration: 0.55, delay }}
     >
       {children}
     </motion.div>
@@ -63,12 +63,12 @@ export function RevealStagger({ children, className, amount = 0.18, once = true 
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once, amount }}
+      viewport={{ once: false, amount }}
       variants={{
         hidden: {},
         show: {
           transition: {
-            staggerChildren: m.stagger,
+            staggerChildren: Math.max(0.06, m.stagger),
           },
         },
       }}
@@ -76,8 +76,13 @@ export function RevealStagger({ children, className, amount = 0.18, once = true 
       {React.Children.map(children, (child) => (
         <motion.div
           variants={{
-            hidden: { opacity: 0, y: 14, filter: 'blur(10px)' },
-            show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: m.transition },
+            hidden: { opacity: 0, y: 22, filter: 'blur(14px)' },
+            show: {
+              opacity: 1,
+              y: 0,
+              filter: 'blur(0px)',
+              transition: { ...m.transition, duration: 0.55 },
+            },
           }}
         >
           {child}
