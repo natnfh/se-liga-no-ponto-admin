@@ -103,10 +103,10 @@ const Dashboard: React.FC = () => {
               backgroundPositionX: textFill,
             }}
           >
-            <StaggerText text="Real-time ops, with digital agency polish." />
+            <StaggerText text="Operação em tempo real, com estética de agência digital." />
           </motion.h1>
           <motion.p className="mt-4 max-w-2xl text-sm text-ink-600" style={{ opacity: contentOpacity }}>
-            Monitor pipelines, payments, and scrapers with immersive motion that syncs to your scroll.
+            Monitore pipelines, pagamentos e scrapers com motion imersivo sincronizado ao seu scroll.
           </motion.p>
         </div>
       </section>
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
                 <Badge tone="info">Asaas Connected</Badge>
                 <Button variant="primary" size="sm" rightIcon={<ArrowRight size={16} />}
                 >
-                  View billing
+                  Ver cobrança
                 </Button>
               </div>
             </div>
@@ -287,11 +287,11 @@ const Dashboard: React.FC = () => {
         <Card className="overflow-hidden">
           <CardHeader className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-ink-50">Recent pipeline activity</h3>
+              <h3 className="text-sm font-semibold text-ink-50">Atividade recente do pipeline</h3>
               <p className="text-xs text-ink-600">Scrapers, webhooks, infra jobs</p>
             </div>
             <Button variant="secondary" size="sm">
-              View all logs
+              Ver todos os logs
             </Button>
           </CardHeader>
           <CardContent className="px-0 pb-0">

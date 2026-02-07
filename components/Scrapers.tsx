@@ -102,7 +102,7 @@ const Scrapers: React.FC = () => {
               <Card key={`track-${scraper.id}`} className="min-w-[280px]">
                 <CardContent className="pt-6">
                   <h4 className="text-sm font-semibold text-ink-50">{scraper.name}</h4>
-                  <p className="text-xs text-ink-600">Horizontal track preview</p>
+                  <p className="text-xs text-ink-600">Prévia do trilho horizontal</p>
                 </CardContent>
               </Card>
             ))}

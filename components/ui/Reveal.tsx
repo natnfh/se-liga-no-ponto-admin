@@ -32,8 +32,8 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 24, filter: 'blur(14px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, amount }}
       transition={{ ...m.transition, duration: 0.55, delay }}
     >
@@ -76,11 +76,10 @@ export function RevealStagger({ children, className, amount = 0.18, once = true 
       {React.Children.map(children, (child) => (
         <motion.div
           variants={{
-            hidden: { opacity: 0, y: 22, filter: 'blur(14px)' },
+            hidden: { opacity: 0, y: 22 },
             show: {
               opacity: 1,
               y: 0,
-              filter: 'blur(0px)',
               transition: { ...m.transition, duration: 0.55 },
             },
           }}

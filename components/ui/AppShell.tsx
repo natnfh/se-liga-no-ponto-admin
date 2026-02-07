@@ -17,7 +17,6 @@ import {
   useScroll,
   useSpring,
   useTransform,
-  useVelocity,
   useMotionValue,
   useMotionValueEvent,
   useMotionTemplate,
@@ -45,11 +44,7 @@ export function AppShell({
   const headerAlpha = useTransform(scrollYProgress, [0, 0.06], [0.35, 0.88])
   const borderAlpha = useTransform(scrollYProgress, [0, 0.06], [0.06, 0.14])
 
-  // Apple-like scroll velocity feedback (subtle blur that relaxes)
-  const v = useVelocity(scrollY)
-  const vSmooth = useSpring(v, { stiffness: 220, damping: 40, mass: 0.7 })
-  const velocityBlur = useTransform(vSmooth, [-2200, 0, 2200], [3, 0, 3])
-  const velocitySaturate = useTransform(vSmooth, [-2200, 0, 2200], [1.12, 1, 1.12])
+  // Scroll velocity feedback disabled (can make text look soft/blurred on some displays)
 
   // Optional debug via ?debugMotion=1 (hidden by default)
   const [debugMotion, setDebugMotion] = useState(false)
@@ -64,7 +59,6 @@ export function AppShell({
   // Motion templates ensure styles update reactively (no .get() snapshots)
   const headerBg = useMotionTemplate`rgba(7, 11, 18, ${headerAlpha})`
   const headerBorder = useMotionTemplate`rgba(255, 255, 255, ${borderAlpha})`
-  const headerFilter = useMotionTemplate`blur(${velocityBlur}px) saturate(${velocitySaturate})`
   const scrollBarX = useSpring(scrollYProgress, {
     stiffness: 220,
     damping: 40,
@@ -91,9 +85,9 @@ export function AppShell({
       { id: AppSection.DASHBOARD, name: 'Dashboard', icon: LayoutDashboard },
       { id: AppSection.SCRAPERS, name: 'Scrapers & Jobs', icon: Database },
       { id: AppSection.MOBILE, name: 'Mobile (Capacitor)', icon: Smartphone },
-      { id: AppSection.SUBSCRIPTIONS, name: 'Asaas Billing', icon: CreditCard },
-      { id: AppSection.AUDIT, name: 'Security & Audit', icon: ShieldCheck },
-      { id: AppSection.SETTINGS, name: 'Runtime Config', icon: Settings },
+      { id: AppSection.SUBSCRIPTIONS, name: 'Cobrança Asaas', icon: CreditCard },
+      { id: AppSection.AUDIT, name: 'Segurança & Auditoria', icon: ShieldCheck },
+      { id: AppSection.SETTINGS, name: 'Config. de Runtime', icon: Settings },
     ],
     [],
   )
@@ -212,8 +206,7 @@ export function AppShell({
               transition: 'box-shadow 220ms ease',
               WebkitBackdropFilter: 'blur(18px) saturate(160%)',
               backdropFilter: 'blur(18px) saturate(160%)',
-              // scroll velocity “weight”
-              filter: headerFilter as any,
+              // keep text crisp: avoid CSS filter on containers
             }}
           >
             {!debugMotion ? null : (

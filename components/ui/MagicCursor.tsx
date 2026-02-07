@@ -59,7 +59,11 @@ export function MagicCursor() {
   const y = useMotionValue(0)
   const smoothX = useSpring(x, { stiffness: 400, damping: 42, mass: 0.6 })
   const smoothY = useSpring(y, { stiffness: 400, damping: 42, mass: 0.6 })
-  const scale = useTransform(label, (value) => (value ? 1.8 : 1))
+  const labelActive = useMotionValue(0)
+  useEffect(() => {
+    labelActive.set(label ? 1 : 0)
+  }, [label, labelActive])
+  const scale = useTransform(labelActive, [0, 1], [1, 1.8])
 
   useEffect(() => {
     const handleMove = (event: MouseEvent) => {

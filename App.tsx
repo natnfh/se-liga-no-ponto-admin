@@ -32,9 +32,9 @@ const App: React.FC = () => {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={activeSection}
-          initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, y: -8, filter: 'blur(6px)' }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
           transition={m.transition}
         >
           {renderContent()}
