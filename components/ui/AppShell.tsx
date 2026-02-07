@@ -25,6 +25,7 @@ import {
 import { AppSection } from '../../types'
 import { useMotionPreset } from './motion'
 import { Button } from './Button'
+import { MagicCursor } from './MagicCursor'
 
 export function AppShell({
   active,
@@ -98,7 +99,8 @@ export function AppShell({
   )
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen custom-cursor-active">
+      <MagicCursor />
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useMotionPreset } from './motion'
+import { useMagnetic } from './MagicCursor'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 type Size = 'sm' | 'md' | 'lg'
@@ -44,9 +45,13 @@ export function Button({
   ...props
 }: ButtonProps) {
   const motionPreset = useMotionPreset()
+  const ref = useRef<HTMLButtonElement>(null)
+  const magnetic = useMagnetic(ref)
 
   return (
     <motion.button
+      ref={ref}
+      style={{ x: magnetic.x, y: magnetic.y }}
       whileHover={{ y: -1 }}
       whileTap={{ y: 0, scale: 0.98 }}
       transition={motionPreset.spring}

@@ -7,6 +7,10 @@ import { Button } from './ui/Button'
 import { motion } from 'framer-motion'
 import { useMotionPreset } from './ui/motion'
 import { Reveal, RevealStagger } from './ui/Reveal'
+import { HorizontalSection } from './ui/HorizontalSection'
+import { LiquidImage } from './ui/LiquidImage'
+import { TiltCard } from './ui/TiltCard'
+import { StaggerText } from './ui/StaggerText'
 
 const Scrapers: React.FC = () => {
   const [isRunningAll, setIsRunningAll] = useState(false);
@@ -25,7 +29,9 @@ const Scrapers: React.FC = () => {
     <div className="space-y-6">
       <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Scrapers & Jobs</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-ink-50">
+            <StaggerText text="Scrapers & Jobs" />
+          </h2>
           <p className="text-ink-600">Automation pipelines • Python scrapers • schedulers</p>
         </div>
         <Button
@@ -41,13 +47,14 @@ const Scrapers: React.FC = () => {
 
       <RevealStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {scraperList.map((scraper, i) => (
-          <Card key={scraper.id}>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...m.transition, delay: i * m.stagger }}
-            >
-              <CardContent className="pt-6">
+          <TiltCard key={scraper.id}>
+            <Card>
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...m.transition, delay: i * m.stagger }}
+              >
+                <CardContent className="pt-6">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-white/6 rounded-xl border border-white/10 text-ink-200">
                   <Terminal size={20} />
@@ -81,11 +88,36 @@ const Scrapers: React.FC = () => {
                   Logs
                 </Button>
               </div>
-              </CardContent>
-            </motion.div>
-          </Card>
+                </CardContent>
+              </motion.div>
+            </Card>
+          </TiltCard>
         ))}
       </RevealStagger>
+
+      <HorizontalSection className="mt-10">
+        <div className="h-full w-full flex items-center justify-center bg-transparent">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6">
+            {scraperList.slice(0, 2).map((scraper) => (
+              <Card key={`track-${scraper.id}`} className="min-w-[280px]">
+                <CardContent className="pt-6">
+                  <h4 className="text-sm font-semibold text-ink-50">{scraper.name}</h4>
+                  <p className="text-xs text-ink-600">Horizontal track preview</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+        <div className="h-full w-full flex items-center justify-center bg-transparent">
+          <div className="w-[480px]">
+            <LiquidImage
+              src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=900&q=80"
+              alt="Scraper panorama"
+              className="h-[320px] w-full"
+            />
+          </div>
+        </div>
+      </HorizontalSection>
 
       <Reveal>
         <Card className="overflow-hidden">

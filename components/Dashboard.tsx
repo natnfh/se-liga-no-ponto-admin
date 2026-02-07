@@ -26,8 +26,10 @@ import {
 import { Card, CardContent, CardHeader } from './ui/Card'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
-import { useMotionPreset } from './ui/motion'
 import { Reveal, RevealStagger } from './ui/Reveal'
+import { StaggerText } from './ui/StaggerText'
+import { TiltCard } from './ui/TiltCard'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 const data = [
   { name: 'Mon', active: 400, errors: 24, revenue: 2400 },
@@ -46,36 +48,72 @@ const StatCard: React.FC<{
   isPositive: boolean
   icon: React.ElementType
 }> = ({ title, value, change, isPositive, icon: Icon }) => (
-  <Card className="group">
-    <CardContent className="pt-6">
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-2.5 rounded-xl bg-white/6 border border-white/10 text-lum-cyan shadow-glow">
-          <Icon size={20} />
+  <TiltCard className="group">
+    <Card>
+      <CardContent className="pt-6">
+        <div className="flex justify-between items-start mb-4">
+          <div className="p-2.5 rounded-xl bg-white/6 border border-white/10 text-lum-cyan shadow-glow">
+            <Icon size={20} />
+          </div>
+          <div
+            className={`flex items-center gap-1 text-xs font-semibold ${
+              isPositive ? 'text-lum-green' : 'text-lum-rose'
+            }`}
+          >
+            {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+            {change}
+          </div>
         </div>
-        <div
-          className={`flex items-center gap-1 text-xs font-semibold ${
-            isPositive ? 'text-lum-green' : 'text-lum-rose'
-          }`}
-        >
-          {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-          {change}
+        <p className="text-xs text-ink-600">{title}</p>
+        <p className="text-2xl font-semibold text-ink-50 mt-1">{value}</p>
+        <div className="mt-4 h-1.5 w-full rounded-full bg-white/6 overflow-hidden">
+          <div className="h-full w-2/3 bg-gradient-to-r from-lum-cyan/40 to-lum-indigo/40" />
         </div>
-      </div>
-      <p className="text-xs text-ink-600">{title}</p>
-      <p className="text-2xl font-semibold text-ink-50 mt-1">{value}</p>
-      <div className="mt-4 h-1.5 w-full rounded-full bg-white/6 overflow-hidden">
-        <div className="h-full w-2/3 bg-gradient-to-r from-lum-cyan/40 to-lum-indigo/40" />
-      </div>
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
+  </TiltCard>
 )
 
 const Dashboard: React.FC = () => {
+  const heroRef = React.useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start center', 'end center'],
+  })
+  const textFill = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.5])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 0.6, 1])
+
   return (
     <div className="space-y-6">
+      <section ref={heroRef} className="relative overflow-hidden rounded-3xl border border-white/8 bg-white/4">
+        <motion.div
+          className="absolute inset-0"
+          style={{ scale: imageScale, opacity: 0.35 }}
+        >
+          <div className="h-full w-full bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.25),transparent_60%)]" />
+        </motion.div>
+        <div className="relative z-10 px-6 py-12 md:px-10">
+          <motion.h1
+            className="text-3xl md:text-5xl font-semibold text-transparent bg-clip-text"
+            style={{
+              backgroundImage:
+                'linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.95) 50%, rgba(34,211,238,0.95) 100%)',
+              backgroundSize: '200% 100%',
+              backgroundPositionX: textFill,
+            }}
+          >
+            <StaggerText text="Real-time ops, with digital agency polish." />
+          </motion.h1>
+          <motion.p className="mt-4 max-w-2xl text-sm text-ink-600" style={{ opacity: contentOpacity }}>
+            Monitor pipelines, payments, and scrapers with immersive motion that syncs to your scroll.
+          </motion.p>
+        </div>
+      </section>
       <RevealStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardContent className="pt-6">
+        <TiltCard className="lg:col-span-2">
+          <Card>
+            <CardContent className="pt-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-xs text-ink-600">Revenue (MRR)</p>
@@ -115,11 +153,13 @@ const Dashboard: React.FC = () => {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </TiltCard>
 
-        <Card>
-          <CardContent className="pt-6">
+        <TiltCard>
+          <Card>
+            <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-ink-600">Platform SLA</p>
@@ -145,8 +185,9 @@ const Dashboard: React.FC = () => {
                 <span className="font-semibold">22:00–02:00</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </TiltCard>
       </RevealStagger>
 
       <RevealStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
