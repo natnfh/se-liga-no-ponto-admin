@@ -11,7 +11,17 @@ import {
   Search,
   Sparkles,
 } from 'lucide-react'
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+  useMotionValue,
+  useMotionValueEvent,
+  useMotionTemplate,
+} from 'framer-motion'
 import { AppSection } from '../../types'
 import { useMotionPreset } from './motion'
 import { Button } from './Button'
@@ -28,7 +38,32 @@ export function AppShell({
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const m = useMotionPreset()
   const [scrolled, setScrolled] = useState(false)
-  const { scrollYProgress } = useScroll()
+  const { scrollYProgress, scrollY } = useScroll()
+
+  // Apple-like continuous header material changes
+  const headerAlpha = useTransform(scrollYProgress, [0, 0.06], [0.35, 0.88])
+  const borderAlpha = useTransform(scrollYProgress, [0, 0.06], [0.06, 0.14])
+
+  // Apple-like scroll velocity feedback (subtle blur that relaxes)
+  const v = useVelocity(scrollY)
+  const vSmooth = useSpring(v, { stiffness: 220, damping: 40, mass: 0.7 })
+  const velocityBlur = useTransform(vSmooth, [-2200, 0, 2200], [3, 0, 3])
+  const velocitySaturate = useTransform(vSmooth, [-2200, 0, 2200], [1.12, 1, 1.12])
+
+  // Optional debug via ?debugMotion=1 (hidden by default)
+  const [debugMotion, setDebugMotion] = useState(false)
+  const debugEvents = useMotionValue(0)
+  useEffect(() => {
+    setDebugMotion(new URLSearchParams(window.location.search).get('debugMotion') === '1')
+  }, [])
+  useMotionValueEvent(scrollY, 'change', () => {
+    debugEvents.set(debugEvents.get() + 1)
+  })
+
+  // Motion templates ensure styles update reactively (no .get() snapshots)
+  const headerBg = useMotionTemplate`rgba(7, 11, 18, ${headerAlpha})`
+  const headerBorder = useMotionTemplate`rgba(255, 255, 255, ${borderAlpha})`
+  const headerFilter = useMotionTemplate`blur(${velocityBlur}px) saturate(${velocitySaturate})`
   const scrollBarX = useSpring(scrollYProgress, {
     stiffness: 220,
     damping: 40,
@@ -167,16 +202,32 @@ export function AppShell({
         <div className="flex-1 min-w-0">
           {/* Topbar */}
           <header
-            className={
-              'sticky top-0 z-30 border-b border-white/6 backdrop-blur-glass transition-[box-shadow,background-color] ' +
-              (scrolled ? 'bg-panel-900/70 shadow-elev-2' : 'bg-panel-900/40')
-            }
+            className="sticky top-0 z-30 border-b border-white/6 backdrop-blur-glass"
+            style={{
+              backgroundColor: headerBg as any,
+              borderBottomColor: headerBorder as any,
+              boxShadow: scrolled ? '0 18px 70px rgba(0,0,0,0.55)' : 'none',
+              transition: 'box-shadow 220ms ease',
+              WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+              backdropFilter: 'blur(18px) saturate(160%)',
+              // scroll velocity “weight”
+              filter: headerFilter as any,
+            }}
           >
+            {!debugMotion ? null : (
+              <div className="absolute right-3 top-3 z-[60] rounded-full bg-red-500/90 px-3 py-1 text-[11px] font-semibold text-white shadow-elev-2 select-none">
+                debugMotion=1
+              </div>
+            )}
             {!m.transition?.duration ? null : (
               <motion.div
                 aria-hidden
-                className="absolute left-0 top-0 h-[3px] w-full origin-left bg-gradient-to-r from-lum-cyan via-lum-indigo to-lum-violet opacity-100"
-                style={{ scaleX: scrollBarX }}
+                className="absolute left-0 top-0 h-[4px] w-full origin-left bg-gradient-to-r from-lum-cyan via-lum-indigo to-lum-violet"
+                style={{
+                  scaleX: scrollBarX,
+                  filter: 'blur(0.6px)',
+                  opacity: 0.9,
+                }}
               />
             )}
             <div className="h-16 px-4 md:px-8 flex items-center justify-between gap-4">
