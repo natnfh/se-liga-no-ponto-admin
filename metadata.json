@@ -1,0 +1,5 @@
+{
+  "name": "Se Liga No Ponto Admin",
+  "description": "Exclusive dashboard for managing the Se Liga No Ponto SaaS ecosystem, including scraper monitoring, subscription tracking, and mobile deployment checklists.",
+  "requestFramePermissions": []
+}
