@@ -26,8 +26,8 @@ import {
 import { Card, CardContent, CardHeader } from './ui/Card'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
-import { motion } from 'framer-motion'
 import { useMotionPreset } from './ui/motion'
+import { Reveal, RevealStagger } from './ui/Reveal'
 
 const data = [
   { name: 'Mon', active: 400, errors: 24, revenue: 2400 },
@@ -71,16 +71,9 @@ const StatCard: React.FC<{
 )
 
 const Dashboard: React.FC = () => {
-  const m = useMotionPreset()
-
   return (
     <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={m.transition}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-      >
+      <RevealStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardContent className="pt-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -154,17 +147,18 @@ const Dashboard: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </RevealStagger>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <RevealStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Total Users" value="2,842" change="12.5%" isPositive={true} icon={Users} />
         <StatCard title="Active Subs" value="1,120" change="8.2%" isPositive={true} icon={TrendingUp} />
         <StatCard title="API Health" value="99.9%" change="0.1%" isPositive={true} icon={Activity} />
         <StatCard title="Total Errors" value="154" change="23%" isPositive={false} icon={AlertCircle} />
-      </div>
+      </RevealStagger>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
+        <Reveal className="lg:col-span-2">
+          <Card>
           <CardHeader className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold text-ink-50">User activity</h3>
@@ -192,9 +186,10 @@ const Dashboard: React.FC = () => {
               </ResponsiveContainer>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </Reveal>
 
-        <div className="space-y-6">
+        <RevealStagger className="space-y-6">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -244,55 +239,57 @@ const Dashboard: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </RevealStagger>
       </div>
 
-      <Card className="overflow-hidden">
-        <CardHeader className="flex items-center justify-between">
-          <div>
-            <h3 className="text-sm font-semibold text-ink-50">Recent pipeline activity</h3>
-            <p className="text-xs text-ink-600">Scrapers, webhooks, infra jobs</p>
-          </div>
-          <Button variant="secondary" size="sm">
-            View all logs
-          </Button>
-        </CardHeader>
-        <CardContent className="px-0 pb-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-white/4 text-ink-600 text-xs uppercase">
-                <tr>
-                  <th className="px-6 py-4 font-semibold">Service</th>
-                  <th className="px-6 py-4 font-semibold">Type</th>
-                  <th className="px-6 py-4 font-semibold">Status</th>
-                  <th className="px-6 py-4 font-semibold">Duration</th>
-                  <th className="px-6 py-4 font-semibold">Timestamp</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/6">
-                {[
-                  { s: 'TudoAzul Scraper', t: 'Cron Job', st: 'Success', d: '24s', tm: '2 mins ago' },
-                  { s: 'LATAM Pipeline', t: 'Manual Trigger', st: 'Success', d: '1.2m', tm: '15 mins ago' },
-                  { s: 'Smiles Engine', t: 'Cron Job', st: 'Error', d: '0s', tm: '1 hour ago' },
-                  { s: 'Asaas Webhook', t: 'Incoming', st: 'Success', d: '120ms', tm: '3 hours ago' },
-                ].map((row, i) => (
-                  <tr key={i} className="hover:bg-white/4 transition-colors">
-                    <td className="px-6 py-4 font-medium text-ink-50">{row.s}</td>
-                    <td className="px-6 py-4 text-ink-600">{row.t}</td>
-                    <td className="px-6 py-4">
-                      <Badge tone={row.st === 'Success' ? 'success' : 'danger'}>
-                        {row.st}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4 text-ink-600">{row.d}</td>
-                    <td className="px-6 py-4 text-ink-600">{row.tm}</td>
+      <Reveal>
+        <Card className="overflow-hidden">
+          <CardHeader className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-ink-50">Recent pipeline activity</h3>
+              <p className="text-xs text-ink-600">Scrapers, webhooks, infra jobs</p>
+            </div>
+            <Button variant="secondary" size="sm">
+              View all logs
+            </Button>
+          </CardHeader>
+          <CardContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-white/4 text-ink-600 text-xs uppercase">
+                  <tr>
+                    <th className="px-6 py-4 font-semibold">Service</th>
+                    <th className="px-6 py-4 font-semibold">Type</th>
+                    <th className="px-6 py-4 font-semibold">Status</th>
+                    <th className="px-6 py-4 font-semibold">Duration</th>
+                    <th className="px-6 py-4 font-semibold">Timestamp</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+                </thead>
+                <tbody className="divide-y divide-white/6">
+                  {[
+                    { s: 'TudoAzul Scraper', t: 'Cron Job', st: 'Success', d: '24s', tm: '2 mins ago' },
+                    { s: 'LATAM Pipeline', t: 'Manual Trigger', st: 'Success', d: '1.2m', tm: '15 mins ago' },
+                    { s: 'Smiles Engine', t: 'Cron Job', st: 'Error', d: '0s', tm: '1 hour ago' },
+                    { s: 'Asaas Webhook', t: 'Incoming', st: 'Success', d: '120ms', tm: '3 hours ago' },
+                  ].map((row, i) => (
+                    <tr key={i} className="hover:bg-white/4 transition-colors">
+                      <td className="px-6 py-4 font-medium text-ink-50">{row.s}</td>
+                      <td className="px-6 py-4 text-ink-600">{row.t}</td>
+                      <td className="px-6 py-4">
+                        <Badge tone={row.st === 'Success' ? 'success' : 'danger'}>
+                          {row.st}
+                        </Badge>
+                      </td>
+                      <td className="px-6 py-4 text-ink-600">{row.d}</td>
+                      <td className="px-6 py-4 text-ink-600">{row.tm}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      </Reveal>
     </div>
   )
 }
