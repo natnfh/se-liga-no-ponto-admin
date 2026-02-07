@@ -27,9 +27,9 @@ export function useMotionPreset() {
     }
 
     return {
-      transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const },
-      spring: { type: 'spring' as const, stiffness: 420, damping: 38, mass: 0.8 },
-      stagger: 0.04,
+      transition: { duration: 0.45, ease: [0.19, 1, 0.22, 1] as const },
+      spring: { type: 'spring' as const, stiffness: 320, damping: 42, mass: 0.95 },
+      stagger: 0.06,
     }
   }, [reduce])
 }
