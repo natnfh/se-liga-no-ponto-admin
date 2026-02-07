@@ -22,7 +22,7 @@ import {
   useMotionTemplate,
 } from 'framer-motion'
 import { AppSection } from '../../types'
-import { useMotionPreset } from './motion'
+import { useMotionPreset, usePrefersReducedMotion } from './motion'
 import { Button } from './Button'
 import { MagicCursor } from './MagicCursor'
 
@@ -37,6 +37,7 @@ export function AppShell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const m = useMotionPreset()
+  const reduce = usePrefersReducedMotion()
   const [scrolled, setScrolled] = useState(false)
   const { scrollYProgress, scrollY } = useScroll()
 
@@ -99,12 +100,47 @@ export function AppShell({
   const tintY = useTransform(scrollYProgress, [0, 1], [30, 70])
   const tintBg = useMotionTemplate`radial-gradient(${tintSize}px ${tintSize}px at ${tintX}% ${tintY}%, rgba(167, 139, 250, ${tintAlpha}), transparent 60%)`
 
+  // Cursor spotlight (white halo) - fixed layer so it doesn't disappear on scroll
+  const cursorX = useMotionValue(0.5)
+  const cursorY = useMotionValue(0.5)
+  const cursorXSmooth = useSpring(cursorX, { stiffness: 140, damping: 24, mass: 0.8 })
+  const cursorYSmooth = useSpring(cursorY, { stiffness: 140, damping: 24, mass: 0.8 })
+
+  useEffect(() => {
+    if (reduce) return
+    const onMove = (e: MouseEvent) => {
+      const w = window.innerWidth || 1
+      const h = window.innerHeight || 1
+      cursorX.set(e.clientX / w)
+      cursorY.set(e.clientY / h)
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove as any)
+  }, [cursorX, cursorY, reduce])
+
+  const spotAlpha = useTransform(scrollYProgress, [0, 1], [0.32, 0.22])
+  const spotSize = useTransform(scrollYProgress, [0, 1], [260, 360])
+  const spotX = useTransform(cursorXSmooth, (v) => `${v * 100}%`)
+  const spotY = useTransform(cursorYSmooth, (v) => `${v * 100}%`)
+  const spotBg = useMotionTemplate`radial-gradient(${spotSize}px ${spotSize}px at ${spotX} ${spotY}, rgba(255,255,255, ${spotAlpha}), transparent 65%)`
+
   return (
     <div className="min-h-screen custom-cursor-active">
       <div className="tp-bg" aria-hidden>
         <motion.div className="tp-bg__tint" style={{ opacity: 1, backgroundImage: tintBg as any }} />
         <div className="tp-bg__vignette" />
       </div>
+
+      {reduce ? null : (
+        <motion.div
+          className="tp-spot"
+          aria-hidden
+          style={{
+            backgroundImage: spotBg as any,
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+      )}
 
       <MagicCursor />
       <AnimatePresence>
