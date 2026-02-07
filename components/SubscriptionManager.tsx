@@ -1,148 +1,104 @@
 
-import React from 'react'
-import { CreditCard, ExternalLink, RefreshCw, Check, Clock } from 'lucide-react'
-import { motion } from 'framer-motion'
-import { Badge } from './ui/Badge'
-import { Button } from './ui/Button'
-import { Card, CardContent, CardHeader } from './ui/Card'
-import { useMotionPreset } from './ui/motion'
+import React from 'react';
+import { CreditCard, ExternalLink, RefreshCw, Check, Clock } from 'lucide-react';
 
 const SubscriptionManager: React.FC = () => {
-  const m = useMotionPreset()
-
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Billing</h2>
-          <p className="text-ink-600">Asaas integration • webhooks • reconciliation</p>
+          <h2 className="text-2xl font-bold">Billing Management</h2>
+          <p className="text-slate-500">Asaas API Integration status</p>
         </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="success">
+        <div className="flex gap-2">
+          <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold flex items-center gap-1">
             <Check size={14} /> API Active
-          </Badge>
-          <Badge tone="info">
-            <RefreshCw size={14} /> 5 Pending hooks
-          </Badge>
-          <Button variant="primary" size="sm" leftIcon={<RefreshCw size={16} />}>Sync</Button>
+          </span>
+          <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-bold flex items-center gap-1">
+            <RefreshCw size={14} /> 5 Pending Hooks
+          </span>
         </div>
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="text-sm font-semibold text-ink-50">Recent transactions</h3>
-            <p className="text-xs text-ink-600">Last 24h • normalized statuses</p>
-          </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            rightIcon={<ExternalLink size={16} />}
-          >
-            Open Asaas Dashboard
-          </Button>
-        </CardHeader>
-        <CardContent className="px-0 pb-0">
-          <div className="divide-y divide-white/6">
-            {[
-              { user: 'João Silva', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Paid', date: '10 min ago' },
-              { user: 'Maria Souza', plan: 'Mensal', amount: 'R$ 29,90', status: 'Pending', date: '1 hour ago' },
-              { user: 'Pedro Alvares', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Refunded', date: 'Yesterday' },
-              { user: 'Ana Paula', plan: 'Mensal', amount: 'R$ 29,90', status: 'Paid', date: 'Feb 15, 2024' },
-            ].map((tx, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...m.transition, delay: i * m.stagger }}
-                className="px-6 py-4 flex items-center justify-between hover:bg-white/4"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-white/7 border border-white/10 flex items-center justify-center text-ink-600">
-                    <CreditCard size={18} />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-ink-50">{tx.user}</p>
-                    <p className="text-xs text-ink-600">{tx.plan} • {tx.date}</p>
-                  </div>
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+          <h3 className="font-bold">Recent Asaas Transactions</h3>
+          <button className="text-indigo-600 text-sm flex items-center gap-1 hover:underline">
+            Go to Asaas Dashboard <ExternalLink size={14} />
+          </button>
+        </div>
+        <div className="divide-y divide-slate-100">
+          {[
+            { user: 'João Silva', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Paid', date: '10 min ago' },
+            { user: 'Maria Souza', plan: 'Mensal', amount: 'R$ 29,90', status: 'Pending', date: '1 hour ago' },
+            { user: 'Pedro Alvares', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Refunded', date: 'Yesterday' },
+            { user: 'Ana Paula', plan: 'Mensal', amount: 'R$ 29,90', status: 'Paid', date: 'Feb 15, 2024' },
+          ].map((tx, i) => (
+            <div key={i} className="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500">
+                  <CreditCard size={20} />
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold">{tx.amount}</p>
-                  <Badge
-                    tone={tx.status === 'Paid' ? 'success' : tx.status === 'Pending' ? 'warn' : 'neutral'}
-                    className="mt-1"
-                  >
-                    {tx.status}
-                  </Badge>
+                <div>
+                  <p className="font-bold text-slate-800">{tx.user}</p>
+                  <p className="text-xs text-slate-500">{tx.plan} • {tx.date}</p>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-semibold">Webhook health</h4>
-                <p className="text-xs text-ink-600">Last 30m • idempotency enabled</p>
               </div>
-              <Badge tone="info">Live</Badge>
+              <div className="text-right">
+                <p className="font-bold">{tx.amount}</p>
+                <span className={`text-xs font-semibold ${
+                  tx.status === 'Paid' ? 'text-green-600' : tx.status === 'Pending' ? 'text-amber-600' : 'text-slate-400'
+                }`}>
+                  {tx.status}
+                </span>
+              </div>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 text-sm">
-              {[
-                { t: 'PAYMENT_RECEIVED', s: '200 OK', tone: 'success' as const },
-                { t: 'PAYMENT_OVERDUE', s: '200 OK', tone: 'success' as const },
-                { t: 'SUBSCRIPTION_DELETED', s: '500 ERR', tone: 'danger' as const },
-              ].map((row) => (
-                <div key={row.t} className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-ink-600">{row.t}</span>
-                  <Badge tone={row.tone} className="font-mono">
-                    {row.s}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex gap-2">
-              <Button className="flex-1" variant="secondary">
-                Retest hooks
-              </Button>
-              <Button className="flex-1" variant="primary">
-                Reprocess failed
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+          ))}
+        </div>
+      </div>
 
-        <Card className="overflow-hidden">
-          <CardHeader>
-            <h4 className="text-sm font-semibold text-lum-indigo">Integration tasks</h4>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2 text-ink-200">
-                <Check size={16} className="text-lum-green" /> API client initialized
-              </li>
-              <li className="flex items-center gap-2 text-ink-200">
-                <Check size={16} className="text-lum-green" /> Customer bridge
-              </li>
-              <li className="flex items-center gap-2 text-ink-600">
-                <Clock size={16} /> Link billing status to paywall
-              </li>
-              <li className="flex items-center gap-2 text-ink-600">
-                <Clock size={16} /> Automate premium role updates
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-6 bg-white border border-slate-200 rounded-xl">
+          <h4 className="font-bold mb-4">Webhook Health</h4>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-slate-500">PAYMENT_RECEIVED</span>
+              <span className="text-green-500 font-mono">200 OK</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-slate-500">PAYMENT_OVERDUE</span>
+              <span className="text-green-500 font-mono">200 OK</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-slate-500">SUBSCRIPTION_DELETED</span>
+              <span className="text-red-500 font-mono">500 ERR</span>
+            </div>
+          </div>
+          <button className="w-full mt-6 py-2 text-sm text-indigo-600 bg-indigo-50 rounded-lg font-bold">
+            Retest All Hooks
+          </button>
+        </div>
+
+        <div className="p-6 bg-slate-900 rounded-xl text-white">
+          <h4 className="font-bold mb-4 text-indigo-400">Integration Tasks</h4>
+          <ul className="space-y-3 text-sm text-slate-300">
+            <li className="flex items-center gap-2">
+              <Check size={16} className="text-green-500" /> API Client initialized
+            </li>
+            <li className="flex items-center gap-2">
+              <Check size={16} className="text-green-500" /> Customer creation bridge
+            </li>
+            <li className="flex items-center gap-2 text-slate-500">
+              <Clock size={16} /> Link billing status to UI Paywall
+            </li>
+            <li className="flex items-center gap-2 text-slate-500">
+              <Clock size={16} /> Automation for "Premium" role updates
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
 };
 
-export default SubscriptionManager
+export default SubscriptionManager;
