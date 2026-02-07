@@ -8,9 +8,12 @@ import SubscriptionManager from './components/SubscriptionManager'
 import SettingsView from './components/SettingsView'
 import CodeAudit from './components/CodeAudit'
 import { AppShell } from './components/ui/AppShell'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useMotionPreset } from './components/ui/motion'
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<AppSection>(AppSection.DASHBOARD);
+  const m = useMotionPreset()
 
   const renderContent = () => {
     switch (activeSection) {
@@ -26,7 +29,17 @@ const App: React.FC = () => {
 
   return (
     <AppShell active={activeSection} onNavigate={setActiveSection}>
-      {renderContent()}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeSection}
+          initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: -8, filter: 'blur(6px)' }}
+          transition={m.transition}
+        >
+          {renderContent()}
+        </motion.div>
+      </AnimatePresence>
     </AppShell>
   )
 };

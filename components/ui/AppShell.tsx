@@ -11,7 +11,7 @@ import {
   Search,
   Sparkles,
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import { AppSection } from '../../types'
 import { useMotionPreset } from './motion'
 import { Button } from './Button'
@@ -27,6 +27,12 @@ export function AppShell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const m = useMotionPreset()
+  const { scrollYProgress } = useScroll()
+  const scrollBarX = useSpring(scrollYProgress, {
+    stiffness: 220,
+    damping: 40,
+    mass: 0.6,
+  })
 
   const navigation = useMemo(
     () => [
@@ -145,6 +151,13 @@ export function AppShell({
         <div className="flex-1 min-w-0">
           {/* Topbar */}
           <header className="sticky top-0 z-30 border-b border-white/6 bg-panel-900/40 backdrop-blur-glass">
+            {!m.transition?.duration ? null : (
+              <motion.div
+                aria-hidden
+                className="absolute left-0 top-0 h-[2px] w-full origin-left bg-gradient-to-r from-lum-cyan via-lum-indigo to-lum-violet opacity-90"
+                style={{ scaleX: scrollBarX }}
+              />
+            )}
             <div className="h-16 px-4 md:px-8 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
                 <button
