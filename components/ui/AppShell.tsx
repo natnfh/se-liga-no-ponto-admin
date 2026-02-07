@@ -61,7 +61,7 @@ export function AppShell({
           animate={{ x: sidebarOpen ? 0 : -280 }}
           transition={m.spring}
           className={
-            "fixed inset-y-0 left-0 z-50 w-[280px] md:static md:translate-x-0 " +
+            "fixed inset-y-0 left-0 z-50 w-[280px] md:static md:translate-x-0 md:!transform-none " +
             "bg-panel-900 border-r border-white/6 backdrop-blur-glass shadow-elev-2"
           }
         >
@@ -142,7 +142,7 @@ export function AppShell({
         </motion.aside>
 
         {/* Main */}
-        <div className="flex-1 min-w-0 md:pl-0 pl-0">
+        <div className="flex-1 min-w-0">
           {/* Topbar */}
           <header className="sticky top-0 z-30 border-b border-white/6 bg-panel-900/40 backdrop-blur-glass">
             <div className="h-16 px-4 md:px-8 flex items-center justify-between gap-4">
