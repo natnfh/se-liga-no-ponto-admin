@@ -6,13 +6,14 @@ import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
 import { Card, CardContent, CardHeader } from './ui/Card'
 import { useMotionPreset } from './ui/motion'
+import { Reveal, RevealStagger } from './ui/Reveal'
 
 const SubscriptionManager: React.FC = () => {
   const m = useMotionPreset()
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Billing</h2>
           <p className="text-ink-600">Asaas integration • webhooks • reconciliation</p>
@@ -27,62 +28,64 @@ const SubscriptionManager: React.FC = () => {
           </Badge>
           <Button variant="primary" size="sm" leftIcon={<RefreshCw size={16} />}>Sync</Button>
         </div>
-      </div>
+      </Reveal>
 
-      <Card>
-        <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="text-sm font-semibold text-ink-50">Recent transactions</h3>
-            <p className="text-xs text-ink-600">Last 24h • normalized statuses</p>
-          </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            rightIcon={<ExternalLink size={16} />}
-          >
-            Open Asaas Dashboard
-          </Button>
-        </CardHeader>
-        <CardContent className="px-0 pb-0">
-          <div className="divide-y divide-white/6">
-            {[
-              { user: 'João Silva', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Paid', date: '10 min ago' },
-              { user: 'Maria Souza', plan: 'Mensal', amount: 'R$ 29,90', status: 'Pending', date: '1 hour ago' },
-              { user: 'Pedro Alvares', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Refunded', date: 'Yesterday' },
-              { user: 'Ana Paula', plan: 'Mensal', amount: 'R$ 29,90', status: 'Paid', date: 'Feb 15, 2024' },
-            ].map((tx, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...m.transition, delay: i * m.stagger }}
-                className="px-6 py-4 flex items-center justify-between hover:bg-white/4"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-white/7 border border-white/10 flex items-center justify-center text-ink-600">
-                    <CreditCard size={18} />
+      <Reveal>
+        <Card>
+          <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-ink-50">Recent transactions</h3>
+              <p className="text-xs text-ink-600">Last 24h • normalized statuses</p>
+            </div>
+            <Button
+              variant="secondary"
+              size="sm"
+              rightIcon={<ExternalLink size={16} />}
+            >
+              Open Asaas Dashboard
+            </Button>
+          </CardHeader>
+          <CardContent className="px-0 pb-0">
+            <div className="divide-y divide-white/6">
+              {[
+                { user: 'João Silva', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Paid', date: '10 min ago' },
+                { user: 'Maria Souza', plan: 'Mensal', amount: 'R$ 29,90', status: 'Pending', date: '1 hour ago' },
+                { user: 'Pedro Alvares', plan: 'Anual Premium', amount: 'R$ 199,00', status: 'Refunded', date: 'Yesterday' },
+                { user: 'Ana Paula', plan: 'Mensal', amount: 'R$ 29,90', status: 'Paid', date: 'Feb 15, 2024' },
+              ].map((tx, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...m.transition, delay: i * m.stagger }}
+                  className="px-6 py-4 flex items-center justify-between hover:bg-white/4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-xl bg-white/7 border border-white/10 flex items-center justify-center text-ink-600">
+                      <CreditCard size={18} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-ink-50">{tx.user}</p>
+                      <p className="text-xs text-ink-600">{tx.plan} • {tx.date}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-ink-50">{tx.user}</p>
-                    <p className="text-xs text-ink-600">{tx.plan} • {tx.date}</p>
+                  <div className="text-right">
+                    <p className="font-semibold">{tx.amount}</p>
+                    <Badge
+                      tone={tx.status === 'Paid' ? 'success' : tx.status === 'Pending' ? 'warn' : 'neutral'}
+                      className="mt-1"
+                    >
+                      {tx.status}
+                    </Badge>
                   </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">{tx.amount}</p>
-                  <Badge
-                    tone={tx.status === 'Paid' ? 'success' : tx.status === 'Pending' ? 'warn' : 'neutral'}
-                    className="mt-1"
-                  >
-                    {tx.status}
-                  </Badge>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                </motion.div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </Reveal>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <RevealStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -140,7 +143,7 @@ const SubscriptionManager: React.FC = () => {
             </ul>
           </CardContent>
         </Card>
-      </div>
+      </RevealStagger>
     </div>
   );
 };

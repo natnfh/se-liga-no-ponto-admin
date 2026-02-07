@@ -4,6 +4,7 @@ import { Smartphone, CheckCircle2, Circle, AlertTriangle, ExternalLink, Code } f
 import { Card, CardContent, CardHeader } from './ui/Card'
 import { Button } from './ui/Button'
 import { Badge } from './ui/Badge'
+import { Reveal, RevealStagger } from './ui/Reveal'
 
 const MobileDeployment: React.FC = () => {
   const steps = [
@@ -17,57 +18,61 @@ const MobileDeployment: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardContent className="pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Capacitor Deployment Guide</h2>
-              <p className="text-ink-600 max-w-lg">
-                Move from <span className="font-mono bg-white/5 px-1 rounded text-lum-cyan">localhost</span> to
-                App Stores with a controlled release pipeline.
-              </p>
+      <Reveal>
+        <Card>
+          <CardContent className="pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Capacitor Deployment Guide</h2>
+                <p className="text-ink-600 max-w-lg">
+                  Move from <span className="font-mono bg-white/5 px-1 rounded text-lum-cyan">localhost</span> to
+                  App Stores with a controlled release pipeline.
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <Button variant="secondary" size="sm">Open Xcode</Button>
+                <Button variant="primary" size="sm">Android Studio</Button>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <Button variant="secondary" size="sm">Open Xcode</Button>
-              <Button variant="primary" size="sm">Android Studio</Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Reveal>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between px-2">
+          <Reveal className="flex items-center justify-between px-2">
             <h3 className="text-lg font-semibold">Launch Checklist</h3>
             <Badge tone="info">6 steps</Badge>
-          </div>
-          {steps.map((step, i) => (
-            <Card key={i}>
-              <CardContent className="pt-5">
-                <div className="flex items-start gap-4">
-                  <div className="mt-1">
-                    {step.status === 'completed' ? (
-                      <CheckCircle2 className="text-lum-green" />
-                    ) : step.status === 'blocked' ? (
-                      <AlertTriangle className="text-lum-amber" />
-                    ) : (
-                      <Circle className="text-ink-600" />
-                    )}
+          </Reveal>
+          <RevealStagger className="space-y-4">
+            {steps.map((step, i) => (
+              <Card key={i}>
+                <CardContent className="pt-5">
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1">
+                      {step.status === 'completed' ? (
+                        <CheckCircle2 className="text-lum-green" />
+                      ) : step.status === 'blocked' ? (
+                        <AlertTriangle className="text-lum-amber" />
+                      ) : (
+                        <Circle className="text-ink-600" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-ink-50">{step.title}</h4>
+                      <p className="text-sm text-ink-600">{step.desc}</p>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      <ExternalLink size={16} />
+                    </Button>
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-ink-50">{step.title}</h4>
-                    <p className="text-sm text-ink-600">{step.desc}</p>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    <ExternalLink size={16} />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+          </RevealStagger>
         </div>
 
-        <div className="space-y-6">
+        <RevealStagger className="space-y-6">
           <Card>
             <CardHeader>
               <h3 className="text-sm font-semibold flex items-center gap-2">
@@ -103,7 +108,7 @@ const MobileDeployment: React.FC = () => {
               </p>
             </CardContent>
           </Card>
-        </div>
+        </RevealStagger>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import { GoogleGenAI } from "@google/genai"
 import { Card, CardContent, CardHeader } from './ui/Card'
 import { Button } from './ui/Button'
 import { Badge } from './ui/Badge'
+import { Reveal, RevealStagger } from './ui/Reveal'
 
 const CodeAudit: React.FC = () => {
   const [analyzing, setAnalyzing] = useState(false);
@@ -32,7 +33,7 @@ const CodeAudit: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Security & Hardening Audit</h2>
           <p className="text-ink-600">AI-powered risk analysis for the Se Liga No Ponto stack</p>
@@ -46,24 +47,27 @@ const CodeAudit: React.FC = () => {
         >
           {analyzing ? 'Analyzing Infrastructure...' : 'Run Security Audit'}
         </Button>
-      </div>
+      </Reveal>
 
       {!report ? (
-        <Card>
-          <CardContent className="pt-10 pb-12 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/8 border border-white/10 rounded-full mb-4">
-              <ShieldAlert className="text-ink-600" size={28} />
-            </div>
-            <h3 className="text-xl font-semibold text-ink-50 mb-2">Ready for Audit</h3>
-            <p className="text-ink-600 max-w-sm mx-auto mb-6">
-              Scan your architecture for technical debt and security vulnerabilities before going live.
-            </p>
-            <Badge tone="neutral">No report generated yet</Badge>
-          </CardContent>
-        </Card>
+        <Reveal>
+          <Card>
+            <CardContent className="pt-10 pb-12 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/8 border border-white/10 rounded-full mb-4">
+                <ShieldAlert className="text-ink-600" size={28} />
+              </div>
+              <h3 className="text-xl font-semibold text-ink-50 mb-2">Ready for Audit</h3>
+              <p className="text-ink-600 max-w-sm mx-auto mb-6">
+                Scan your architecture for technical debt and security vulnerabilities before going live.
+              </p>
+              <Badge tone="neutral">No report generated yet</Badge>
+            </CardContent>
+          </Card>
+        </Reveal>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in slide-in-from-bottom duration-700">
-          <Card className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Reveal className="lg:col-span-2">
+            <Card>
             <CardHeader>
               <div className="flex items-center gap-2 text-lum-cyan font-semibold uppercase tracking-wider text-xs">
                 <ShieldCheck size={18} />
@@ -75,9 +79,10 @@ const CodeAudit: React.FC = () => {
                 {report}
               </div>
             </CardContent>
-          </Card>
+            </Card>
+          </Reveal>
           
-          <div className="space-y-6">
+          <RevealStagger className="space-y-6">
             <Card>
               <CardHeader>
                 <h4 className="text-sm font-semibold flex items-center gap-2 text-lum-rose">
@@ -122,7 +127,7 @@ const CodeAudit: React.FC = () => {
                 </Button>
               </CardContent>
             </Card>
-          </div>
+          </RevealStagger>
         </div>
       )}
     </div>

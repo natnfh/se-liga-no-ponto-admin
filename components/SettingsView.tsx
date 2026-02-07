@@ -4,6 +4,7 @@ import { Save, AlertCircle, Globe, Server, Lock } from 'lucide-react'
 import { Card, CardContent, CardHeader } from './ui/Card'
 import { Button } from './ui/Button'
 import { Badge } from './ui/Badge'
+import { Reveal, RevealStagger } from './ui/Reveal'
 
 const SettingsView: React.FC = () => {
   const [config, setConfig] = useState({
@@ -16,7 +17,7 @@ const SettingsView: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">System Configuration</h2>
           <p className="text-ink-600">Runtime config • environment variables • access controls</p>
@@ -24,21 +25,23 @@ const SettingsView: React.FC = () => {
         <Button variant="primary" size="sm" leftIcon={<Save size={16} />}>
           Push to Remote
         </Button>
-      </div>
+      </Reveal>
 
-      <Card>
-        <CardContent className="pt-5">
-          <div className="flex items-start gap-3 text-sm text-ink-600">
-            <AlertCircle className="text-lum-amber" />
-            <p>
-              Changes to <strong>apiBaseUrl</strong> will affect all connected Mobile Apps and PWAs
-              immediately via the runtime-config endpoint. Use with caution.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <Reveal>
+        <Card>
+          <CardContent className="pt-5">
+            <div className="flex items-start gap-3 text-sm text-ink-600">
+              <AlertCircle className="text-lum-amber" />
+              <p>
+                Changes to <strong>apiBaseUrl</strong> will affect all connected Mobile Apps and PWAs
+                immediately via the runtime-config endpoint. Use with caution.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </Reveal>
 
-      <div className="grid grid-cols-1 gap-6">
+      <RevealStagger className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -136,7 +139,7 @@ const SettingsView: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </RevealStagger>
     </div>
   )
 }

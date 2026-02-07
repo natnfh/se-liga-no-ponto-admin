@@ -6,6 +6,7 @@ import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
 import { motion } from 'framer-motion'
 import { useMotionPreset } from './ui/motion'
+import { Reveal, RevealStagger } from './ui/Reveal'
 
 const Scrapers: React.FC = () => {
   const [isRunningAll, setIsRunningAll] = useState(false);
@@ -22,7 +23,7 @@ const Scrapers: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Scrapers & Jobs</h2>
           <p className="text-ink-600">Automation pipelines • Python scrapers • schedulers</p>
@@ -36,9 +37,9 @@ const Scrapers: React.FC = () => {
         >
           {isRunningAll ? 'Running All Seeders...' : 'Trigger All Seeders'}
         </Button>
-      </div>
+      </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <RevealStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {scraperList.map((scraper, i) => (
           <Card key={scraper.id}>
             <motion.div
@@ -84,32 +85,34 @@ const Scrapers: React.FC = () => {
             </motion.div>
           </Card>
         ))}
-      </div>
+      </RevealStagger>
 
-      <Card className="overflow-hidden">
-        <CardHeader>
-          <h3 className="text-sm font-semibold text-ink-50">Technical note</h3>
-          <p className="text-xs text-ink-600">Monorepo • scheduler • secrets</p>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-ink-600 max-w-2xl">
-            Scrapers are located in{' '}
-            <code className="bg-white/5 px-1 py-0.5 rounded text-lum-cyan">services/scrapers</code>. They
-            are invoked via an HTTP endpoint protected by{' '}
-            <code className="bg-white/5 px-1 py-0.5 rounded text-lum-cyan">SCHEDULER_SECRET</code>.
-          </p>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white/5 p-3 rounded-xl border border-white/8">
-              <p className="text-xs text-ink-600 mb-1 uppercase tracking-wider">Scraper Engine</p>
-              <p className="font-mono text-sm">Python / FastAPI</p>
+      <Reveal>
+        <Card className="overflow-hidden">
+          <CardHeader>
+            <h3 className="text-sm font-semibold text-ink-50">Technical note</h3>
+            <p className="text-xs text-ink-600">Monorepo • scheduler • secrets</p>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-ink-600 max-w-2xl">
+              Scrapers are located in{' '}
+              <code className="bg-white/5 px-1 py-0.5 rounded text-lum-cyan">services/scrapers</code>. They
+              are invoked via an HTTP endpoint protected by{' '}
+              <code className="bg-white/5 px-1 py-0.5 rounded text-lum-cyan">SCHEDULER_SECRET</code>.
+            </p>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-white/5 p-3 rounded-xl border border-white/8">
+                <p className="text-xs text-ink-600 mb-1 uppercase tracking-wider">Scraper Engine</p>
+                <p className="font-mono text-sm">Python / FastAPI</p>
+              </div>
+              <div className="bg-white/5 p-3 rounded-xl border border-white/8">
+                <p className="text-xs text-ink-600 mb-1 uppercase tracking-wider">Scheduler</p>
+                <p className="font-mono text-sm">GCP / Cron (VPS)</p>
+              </div>
             </div>
-            <div className="bg-white/5 p-3 rounded-xl border border-white/8">
-              <p className="text-xs text-ink-600 mb-1 uppercase tracking-wider">Scheduler</p>
-              <p className="font-mono text-sm">GCP / Cron (VPS)</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Reveal>
     </div>
   )
 }
